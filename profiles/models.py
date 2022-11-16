@@ -27,7 +27,7 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
 
-def avatar_singnal(sender, instance, *args, **kwargs):
+def avatar_signal(sender, instance, *args, **kwargs):
     if instance.avatar == '' or not instance.avatar:
         if instance.user.gender == instance.user.GENDER.MALE:
             instance.avatar = './default/avatar_male.png'
@@ -35,16 +35,16 @@ def avatar_singnal(sender, instance, *args, **kwargs):
             instance.avatar = './default/avatar_female.png'
 
 
-pre_save.connect(avatar_singnal, sender=Profile)
+pre_save.connect(avatar_signal, sender=Profile)
 
 
 # # #############################
 # # # Create Profile when user created
-def create_profile_singnal(sender, created, instance, *args, **kwargs):
+def create_profile_signal(sender, created, instance, *args, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
         pass
 
 
-post_save.connect(create_profile_singnal, sender=User)
+post_save.connect(create_profile_signal, sender=User)
