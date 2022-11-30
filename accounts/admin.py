@@ -18,7 +18,8 @@ class UserAdmin(BaseUserAdmin):
                            'first_name', 'last_name', 'password')}),
         ('Email', {'fields': ('email',)}),
         ('Personal info', {'fields': ('country', 'gender', 'date_of_birth')}),
-        ('Permissions', {'fields': ('is_active', 'is_admin', 'is_staff')}),
+        ('Permissions', {'fields': ('is_active',
+                                    'is_admin', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
     )
 
     add_fieldsets = (
@@ -28,9 +29,6 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     search_fields = ('email', 'username', 'first_name', 'last_name')
-    ordering = ('email',)
-    filter_horizontal = ()
 
 
 admin.site.register(NewUser, UserAdmin)
-admin.site.unregister(Group)

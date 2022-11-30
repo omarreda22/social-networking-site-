@@ -38,7 +38,6 @@ def avatar_signal(sender, instance, *args, **kwargs):
 pre_save.connect(avatar_signal, sender=Profile)
 
 
-# # #############################
 # # # Create Profile when user created
 def create_profile_signal(sender, created, instance, *args, **kwargs):
     if created:
@@ -48,3 +47,37 @@ def create_profile_signal(sender, created, instance, *args, **kwargs):
 
 
 post_save.connect(create_profile_signal, sender=User)
+
+######################################################################################
+######################################################################################
+
+class Relationship(models.Model):
+    class STATUS_CHOICES(models.TextChoices):
+       ACCEPT = 'ACC', 'Accept'
+       CANCEL = 'CAN', 'Cancel'
+
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
+    status = models.CharField(max_length=6, choices=STATUS_CHOICES.choices)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.sender} to {self.receiver}'
+
+
+    @property
+    def is_accepted(self):
+        return self.status == self.STATUS_CHOICES.ACCEPT
+
+
+    def save(self, *args, **kwargs):
+        """ 
+        if receiver accept add, will be added in friends list
+        """
+        sender = self.sender
+        rec = self.receiver
+        if self.is_accepted:
+            sender.friends.add(rec.user)
+            rec.friends.add(sender.user)
+        super().save(*args, **kwargs)

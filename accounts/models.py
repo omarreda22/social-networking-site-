@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, PermissionsMixin, Permission
 )
 from django.core.validators import RegexValidator
 
@@ -47,14 +47,17 @@ class UserManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
 
 USERNAME_REGEX = '^[a-zA-Z0-9.@+-]*$'
 
+# PermissionsMixin
 
-class NewUser(AbstractBaseUser):
+
+class NewUser(PermissionsMixin, AbstractBaseUser):
     class GENDER(models.TextChoices):
         MALE = 'MALE', 'Male'
         FEMALE = 'FEMALE', 'Female'
@@ -83,6 +86,7 @@ class NewUser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -95,12 +99,14 @@ class NewUser(AbstractBaseUser):
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
 
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
+#####################################################################################
+#####################################################################################
+#####################################################################################
 
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
+# from models.py
+# add PermissionsMixin
+# remove has_perm and has_module_perms
+
+# from admin.py
+# fieldsets -> Permissions -> add ('groups', 'user_permissions')
+# remove filter_horizontal
