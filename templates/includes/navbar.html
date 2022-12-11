@@ -31,20 +31,20 @@
         </form>
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
-                <li class="nav-item mr-5">
-                    <a class="nav-link" href="#">{{user.username|title}}</a>
+                <li class="nav-item mr-5 user-name">
+                    <a class="nav-link" href="{% url 'profiles:profile' slug=request.user.username %}">My Profile</a>
                 </li>
-                <li class="nav-item logout">
+                <li class="nav-item logout register">
                     <a class="nav-link" href="#">Logout</a>
                 </li>
             {% else %}
-                <li class="nav-item mr-3">
+                <li class="nav-item mr-3 user-name">
                 <a class="nav-link" href="#">Welcome Guest</a>
                 </li>
                 <li class="nav-item mr-3 login">
                 <a class="nav-link" href="#">Login</a>
                 </li>
-                <li class="nav-item logout">
+                <li class="nav-item register">
                 <a class="nav-link" href="#">Register</a>
                 </li>
             {% endif %}

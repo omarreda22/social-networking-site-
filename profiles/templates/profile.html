@@ -1,0 +1,90 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}My Profile{% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href={% static 'style/profile.css' %}>
+{% endblock %}
+{% block content %}
+
+    <div class="container rounded mt-4 mb-5 profile">
+        <div  class="row">
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img style="border:1px solid #000" class="rounded-circle mt-5" width="170px" src="{{profile.avatar.url}}">
+                
+                <br>
+                <span class="font-weight-bold">{{profile.user.get_full_name}}</span>
+                <span class="text-black-50">{{profile.user.username}}</span>
+        
+                <hr>
+                <span>
+                    {{profile.bio}}            
+                </span>
+            </div>
+        </div>
+        <div class="col-md-8 mt-5">
+            <br>
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Public profile</h4>
+                </div>
+                <br>
+                <table style="background:#fab086" class="table table-bordered  table-hover">
+                    <tbody>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{profile.user.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>First Name</th>
+                        <td>{{profile.user.first_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Name</th>
+                        <td>{{profile.user.last_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{profile.user.country}}</td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td>{{profile.user.gender|title}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth</th>
+                        <td>{{profile.user.date_of_birth}}</td>
+                    </tr>
+                    <tr>
+                        <th>Joined</th>
+                        <td>{{profile.created}}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Update</th>
+                        <td>{{profile.updated}}</td>
+                    </tr>
+                    <tr>
+                        <th>Is Active</th>
+                        <td>
+                            {% if profile.user.is_active %}
+                            <div class="text-center is-active">    
+                                Is Active
+                            </div>
+
+                            {% else %}
+                            <div class="text-center not-active">    
+                                Not Active
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

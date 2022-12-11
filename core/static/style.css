@@ -1,0 +1,91 @@
+.navb {
+    background: #DBCAC0
+}
+
+body {
+    background-color: #47484A;
+}
+
+.navb .logo {
+    color: #242529;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 22px;
+}
+
+.navb .drop .nav-link-custom {
+    color: #000;
+    font-size: 16px;
+    border: 1px #c89493 solid;
+    border-radius: 5px;
+    background-color: #D49796;
+    padding: 7px 10px 7px 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navb .drop .nav-link-custom:hover {
+    color: #000;
+}
+
+.navb .navbar-nav .nav-link {
+    color: #000
+}
+
+.navb .navbar-nav .register {
+    color: #000;
+    border: 1px #c89493 solid;
+    border-radius: 5px;
+    background-color: #D49796;
+    /* padding: -2px; */
+    /* text-decoration: none; */
+}
+
+.navb .navbar-nav .register:hover {
+    background-color: #c28988;
+
+}
+
+.navb .navbar-nav .login {
+    border: 2px #c89493 solid;
+    border-radius: 5px;
+    /* background-color: #0f0f11; */
+    /* padding: -2px; */
+    /* text-decoration: none; */
+}
+
+.navb .navbar-nav .login:hover {
+    background-color: #c89493;
+    transition: 0.5s
+}
+
+.navb .navbar-nav .login .nav-link {
+    color: #000;
+    font-weight: 600;
+}
+
+.navb .navbar-nav .login .nav-link:hover {
+    color: #000;
+}
+
+
+.navb .navbar-nav .register .nav-link {
+    color: #000;
+    font-weight: 600;
+
+}
+
+.navb form .btn {
+    background-color: #f8803f;
+    border: 1px #f8803f solid;
+}
+
+.navb form .btn:hover {
+    background-color: #ed7737;
+}
+
+.navb .navbar-nav .user-name .nav-link {
+    color: #000;
+    font-weight: 600;
+}
