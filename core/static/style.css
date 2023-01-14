@@ -1,24 +1,27 @@
 .navb {
-    background: #DBCAC0
+    background: #670a29
 }
 
 body {
-    background-color: #47484A;
+    background-color: #FFF5E4;
 }
 
 .navb .logo {
-    color: #242529;
+    color: #fedede;
     font-weight: bold;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 22px;
 }
+.navb .logo:hover {
+    color: #fbeaea;
+}
 
 .navb .drop .nav-link-custom {
-    color: #000;
+    color: #fedede;
     font-size: 16px;
-    border: 1px #c89493 solid;
+    border: 1px #f65b8f solid;
     border-radius: 5px;
-    background-color: #D49796;
+    background-color: #f03b77;
     padding: 7px 10px 7px 10px;
     text-decoration: none;
     font-weight: 600;
@@ -26,29 +29,32 @@ body {
 }
 
 .navb .drop .nav-link-custom:hover {
-    color: #000;
+    color: #fedede;
+    background-color: #f45389;
+    border: 1px #f65b8f solid;
+    transition: 0.5s;
 }
 
 .navb .navbar-nav .nav-link {
-    color: #000
+    color: #fedede
 }
 
 .navb .navbar-nav .register {
-    color: #000;
-    border: 1px #c89493 solid;
+    border: 1px #aa1d4c solid;
     border-radius: 5px;
-    background-color: #D49796;
+    background-color: #f03b77;
     /* padding: -2px; */
     /* text-decoration: none; */
 }
 
 .navb .navbar-nav .register:hover {
-    background-color: #c28988;
+    background-color: #f45389;
 
 }
 
 .navb .navbar-nav .login {
-    border: 2px #c89493 solid;
+    border: 2px #a92450 solid;
+    background-color: #a92450;
     border-radius: 5px;
     /* background-color: #0f0f11; */
     /* padding: -2px; */
@@ -56,12 +62,15 @@ body {
 }
 
 .navb .navbar-nav .login:hover {
-    background-color: #c89493;
+    background-color: #bd2b5c;
+    border: 2px #bd2b5c solid;
     transition: 0.5s
 }
 
 .navb .navbar-nav .login .nav-link {
-    color: #000;
+    color: #88162d;
+    color: #fdd3d3;
+    color: #FFC4C4;
     font-weight: 600;
 }
 
@@ -77,12 +86,14 @@ body {
 }
 
 .navb form .btn {
-    background-color: #f8803f;
-    border: 1px #f8803f solid;
+    background-color: #ffe0a9;
+    border: 1px #ffe0a9 solid;
+    color:#000;
+    font-weight: 500;
 }
 
 .navb form .btn:hover {
-    background-color: #ed7737;
+    background-color: #fce4bb;
 }
 
 .navb .navbar-nav .user-name .nav-link {

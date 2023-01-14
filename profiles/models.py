@@ -16,10 +16,13 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     friends = models.ManyToManyField(
-        User, blank=True, null=True, related_name='friends')
+        User, blank=True, related_name='friends')
 
     def __str__(self):
         return self.user.username
+
+    def get_posts_count(self):
+        return self.post_set.all().count()
 
     def save(self, *args, **kwargs):
         if self.slug is None:
@@ -51,13 +54,16 @@ post_save.connect(create_profile_signal, sender=User)
 ######################################################################################
 ######################################################################################
 
+
 class Relationship(models.Model):
     class STATUS_CHOICES(models.TextChoices):
-       ACCEPT = 'ACC', 'Accept'
-       CANCEL = 'CAN', 'Cancel'
+        ACCEPT = 'ACC', 'Accept'
+        CANCEL = 'CAN', 'Cancel'
 
-    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='receiver')
     status = models.CharField(max_length=6, choices=STATUS_CHOICES.choices)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -65,11 +71,9 @@ class Relationship(models.Model):
     def __str__(self):
         return f'{self.sender} to {self.receiver}'
 
-
     @property
     def is_accepted(self):
         return self.status == self.STATUS_CHOICES.ACCEPT
-
 
     def save(self, *args, **kwargs):
         """ 

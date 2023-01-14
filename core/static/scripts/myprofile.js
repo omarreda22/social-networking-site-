@@ -6,8 +6,6 @@ const DisplayNewAvatar = document.getElementById('display-new-avatar');
 const newAvatarURL = document.getElementById('new-avatar-url');
 const imageCloesForm = document.getElementById('image-form-close');
 
-
-
 // Alert 
 const alertBox = document.getElementById('alert-box')
 

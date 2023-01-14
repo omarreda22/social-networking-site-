@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light navb">
     <div class='container'>
-        <a class="navbar-brand logo" href="#">social.NET</a>
+        <a class="navbar-brand logo" href="\">social.NET</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a style="color:#FFC4C4" class="nav-link" href="{% url 'posts:main' %}">Home <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav mr-auto drop">
@@ -32,20 +32,20 @@
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
                 <li class="nav-item mr-5 user-name">
-                    <a class="nav-link" href="{% url 'profiles:profile' slug=request.user.username %}">My Profile</a>
+                    <a style="color:#FFC4C4" class="nav-link" href="{% url 'profiles:profile' slug=request.user.username %}">My Profile</a>
                 </li>
                 <li class="nav-item logout register">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a style="color:#fedede" class="nav-link" href="#">Logout</a>
                 </li>
             {% else %}
                 <li class="nav-item mr-3 user-name">
-                <a class="nav-link" href="#">Welcome Guest</a>
+                <a style="color:#FFC4C4" class="nav-link" href="#">Welcome Guest</a>
                 </li>
                 <li class="nav-item mr-3 login">
-                <a class="nav-link" href="#">Login</a>
+                <a style="color:#FFC4C4; font-weight:700" class="nav-link" href="#">Login</a>
                 </li>
                 <li class="nav-item register">
-                <a class="nav-link" href="#">Register</a>
+                <a style="color:#fedede" class="nav-link" href="#">Register</a>
                 </li>
             {% endif %}
         </ul>

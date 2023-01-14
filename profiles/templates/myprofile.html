@@ -21,8 +21,8 @@
             <div class="col-md-12" id="alert-box">
                 
             </div>
-            <div class="col-md-4 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+            <div class="col-md-4 border-right image-and-bio">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5 image-and-bio">
                     <img style="border:1px solid #000" class="rounded-circle mt-5" width="170px" id="new-avatar-url"
                         src="{{profile.avatar.url}}">
 
@@ -142,7 +142,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-md-8 mt-5">
+            <div class="col-md-8 informa">
                 <br>
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                     <br>
-                    <table style="background:#fab086" class="table table-bordered  table-hover">
+                    <table style="background:#f7d5a3" class="table table-bordered  table-hover">
                         {% comment %} <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -247,6 +247,10 @@
                                     {% endif %}
                                 </td>
                             </tr>
+                            <tr>
+                                <th>Posts Number</th>
+                                <td>{{profile.get_posts_count}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -256,5 +260,5 @@
     </div>
     {% endblock %}
     {% block scripts %}
-    <script type="text/javascript" src={% static 'myprofile/myprofile.js' %}></script>
+    <script type="text/javascript" src={% static 'scripts/myprofile.js' %}></script>
     {% endblock scripts %}
