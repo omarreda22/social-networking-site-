@@ -258,6 +258,259 @@
         </div>
     </div>
     </div>
+    <div class="container mb-5 ">
+        <div class="row">
+            <div class="col-8 informa" style="border-radius: 5px 0px 0px 5px;"> 
+                <div class="row">
+                    <div class="col-6">
+                        <h4 class="pt-2" >Posts (<span id='posts-count'>{{profile.get_posts_count}}</span>)</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-info mt-2 new-post-add" data-toggle="modal" data-target="#addNewPost">New Post</a>
+                    </div>
+                </div>
+                <hr>
+                <div id="all-posts">
+                    {% for post in profile.post_set.all %}
+                    <div class="card myprofile-post mb-3" id="post-post-{{post.id}}" >
+                        <div class="card-header">
+                            <div class="row">
+                                <div class='col-6'>
+                                    <img src="{{profile.avatar.url}}" class="rounded-circle" style="width:45px"alt="Avatar" />
+                                    <span  class='username-phr ml-2 profile-username'>{{profile|title}}</span>
+                                </div>
+                                <div class='col-6 text-right'>
+                                    <a>
+                                        {{post.updated|timesince}} ago
+                                    </a>
+                                    <br>
+                                    <br>
+                                    
+                                    <a class="edit-post" data-toggle="modal" data-target="#edit_post_modal-{{post.id}}">Edit</a>
+                                    <a class="delete-post ml-2" data-toggle="modal" data-target="#delete_post_modal-{{post.id}}">Delete</a>
+                                    
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="edit_post_modal-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="edit_post_modalTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Edit Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <form class="edit-post-form {{post.id}}">
+                                                <div class="modal-body text-left">
+                                                    <div class="text-center" id="edit-image-{{post.id}}"> 
+                                                        <img src="{{post.image.url}}" style="width:50%" class="card-img-top"  alt="...">
+                                                    </div>
+                                                    <br>
+                                                    <p>Image:</p>
+                                                    <input type="file" name="image" accept='image/*' class="form-control" id="edit-post-image-{{post.id}}">
+                                                    <br>
+                                                    <p>Content:</p>
+                                                    <textarea class="form-control" id="edit-post-content-{{post.id}}" rows="5">{{post.content}} </textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit-post-close-{{post.id}}">Close</button>
+                                                    <button type="submit" class="btn btn-light edit-post">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="delete_post_modal-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="#delete_post_modal-{{post.id}}Title" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Delete Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>Are You Sure, Wanna delete this post?</p>
+                                                
+                                            </div>
+                                            <form class="delete-post-form {{post.id}}">
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="delete-post-close-{{post.id}}">Close</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-center" id="general-{{post.id}}">
+                            <h5 class="card-title text-left mb-4 mt-2">{{post.content|linebreaks|urlize}}</h5>
+                            <img src="{{post.image.url}}" style="width:50%" class="card-img-top" alt="...">
+                            {% comment %} <p class="card-text">{{post.content}}</p> {% endcomment %}
+                            
+                        </div>
+                        <div class="card-footer text-muted text-center">
+                            <h5>
+                                <a href="" style="color:#6C7587" data-toggle="modal" data-target="#profileLikesPeople-{{post.id}}">Likes({{post.num_likes}})</a>, 
+                                <a href="" style="color:#6C7587" data-toggle="modal" data-target="#profileCommentsPeople-{{post.id}}">Comments({{post.num_comments}})</h5></a>
+                        </div>
+                    </div>
+                    
+                    {% comment %} Likes People {% endcomment %}
+                    <div class="modal fade" id="profileLikesPeople-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="profileLikesPeopleTitle-{{post.id}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Likes ({{post.num_likes}})</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if post.num_likes > 0 %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Profile</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                    {% for like in post.likes.all %}
+                                    <tr>
+                                        <th scope="row">
+                                            <img src="{{like.avatar.url}}" class="rounded-circle mr-1" style="width:30px"alt="Avatar" />
+                                            {{like}}</th>
+                                        <td><a href="{% url 'profiles:profile' like.slug %}">View Profile</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                    <div class="alert alert-secondary text-center" role="alert">
+                                        No Likes Yet!
+                                    </div>  
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    {% comment %} Comments People {% endcomment %}
+                    <div class="modal fade" id="profileCommentsPeople-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="profileCommentsPeople-{{post.id}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Comments ({{post.num_comments}})</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if post.num_comments > 0 %}
+                                    {% for comment in post.comment_set.all %}
+                                        <div class="card mb-3">
+                                            <div class="card-header">
+                                                <img src="{{comment.user.user.profile.avatar.url}}" class="rounded-circle" style="width:35px"alt="Avatar" />
+                                                <span  class='username-phr pl-1' style="font-size:18px">{{comment.user|title}}</span>
+                                                <span class="tect-muted" style='float:right; margin-top:10px'>
+                                                    {{comment.updated|timesince}} ago
+                                                </span>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">{{comment.body}}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-secondary text-center" role="alert">
+                                        No Comments Yet!
+                                    </div>  
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-4 image-and-bio" style="border-radius:0px 5px 5px 0px">       
+                <h4 class="pt-2">Friends</h4>
+                <table class="table table-light" style="background:#f7d5a3">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>  
+            </div>
+
+        </div>
+    </div>
+
+    {% comment %} Add New Post {% endcomment %}
+    <div class="modal fade" id="addNewPost" tabindex="-1" role="dialog" aria-labelledby="addNewPostTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="add-new-post">
+            <div class="modal-body">
+                <div class="open_new_image_post text-center">
+                    
+                </div>
+                <span class="mt-1 mb-1">Image:</span>
+                {{post_form.image}}
+
+                <p class="mt-3 mb-1">Content:</p>
+                {{post_form.content}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary new-post-close-form" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-light new-post-add">Post</button>
+            </div>
+            </form>
+            </div>
+        </div>
+    </div>
     {% endblock %}
     {% block scripts %}
     <script type="text/javascript" src={% static 'scripts/myprofile.js' %}></script>

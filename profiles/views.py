@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.http import JsonResponse
 
 from .models import Profile
 from .forms import UpdateProfileForm, UpdateBio, UpdateImage
+from posts.forms import CommentPostForm, PostForm
+from posts.models import Post
 
 
 def is_ajax(request):
@@ -41,6 +43,9 @@ def user_profile(request, slug):
         bio_form = UpdateBio(request.POST or None, instance=profile)
 
         avatar = UpdateImage(instance=profile)
+        comment_form = CommentPostForm()
+
+        post_form = PostForm()
 
         template_name = 'myprofile.html'
         context = {
@@ -48,6 +53,8 @@ def user_profile(request, slug):
             'form': InfoForm,
             'bio_form': bio_form,
             'image_form': avatar,
+            'comment_form': comment_form,
+            'post_form': post_form,
         }
         return render(request, template_name, context)
 
@@ -95,3 +102,29 @@ def update_image(request, slug):
             avatarForm.save()
             data['status'] = 'ok'
             return JsonResponse(data)
+
+
+def update_post(request, post_id):
+    form = PostForm(request.POST or None, request.FILES or None)
+    post = Post.objects.get(id=post_id)
+    data = {}
+    if is_ajax(request=request):
+        if form.is_valid():
+            content = form.cleaned_data.get('content')
+            image = form.cleaned_data.get('image')
+            if image != 'default/no-image.jpg':
+                post.image = image
+                data['image'] = f'/media/posts/{str(image)}'
+            else:
+                data['image'] = post.image.url
+
+            post.content = content
+            post.save()
+            data['content'] = content
+            return JsonResponse(data)
+
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    return JsonResponse({'status': 'Ok'})

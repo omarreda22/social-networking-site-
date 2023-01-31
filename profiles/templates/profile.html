@@ -91,4 +91,156 @@
 </div>
 </div>
 </div>
+<div class="container mb-5 ">
+    <div class="row">
+        <div class="col-8 informa" style="border-radius: 5px 0px 0px 5px;"> 
+                <h4 class="pt-2">Posts ({{profile.get_posts_count}})</h4>
+                <hr>
+                {% if profile.get_posts_count > 0 %}
+                    {% for post in profile.post_set.all %}
+                    <div class="card myprofile-post mb-3">
+                        <div class="card-header">
+                            <img src="{{profile.avatar.url}}" class="rounded-circle" style="width:45px"alt="Avatar" />
+                            <span  class='username-phr ml-2 profile-username'>{{profile|title}}</span>
+                            <span class="tect-muted" style='float:right; margin-top:10px'>
+                                {{post.updated|timesince}} ago
+                            </span>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-left mb-4 mt-2">{{post.content|linebreaks|urlize}}</h5>
+                            <img src="{{post.image.url}}" style="width:50%" class="card-img-top" alt="...">
+                            {% comment %} <p class="card-text">{{post.content}}</p> {% endcomment %}
+                            
+                        </div>
+                        <div class="card-footer text-muted text-center">
+                            <h5>
+                                <a href="" style="color:#6C7587" data-toggle="modal" data-target="#profileLikesPeople-{{post.id}}">Likes({{post.num_likes}})</a>, 
+                                <a href="" style="color:#6C7587" data-toggle="modal" data-target="#profileCommentsPeople-{{post.id}}">Comments({{post.num_comments}})</h5></a>
+                        </div>
+                    </div>
+                    
+                    {% comment %} Likes People {% endcomment %}
+                    <div class="modal fade" id="profileLikesPeople-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="profileLikesPeopleTitle-{{post.id}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Likes ({{post.num_likes}})</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if post.num_likes > 0 %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Profile</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                    {% for like in post.likes.all %}
+                                    <tr>
+                                        <th scope="row">{{like}}</th>
+                                        <td><a href="{% url 'profiles:profile' like.slug %}">View Profile</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                    <div class="alert alert-secondary text-center" role="alert">
+                                        No Likes Yet!
+                                    </div>  
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    {% comment %} Comments People {% endcomment %}
+                    <div class="modal fade" id="profileCommentsPeople-{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="profileCommentsPeople-{{post.id}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Comments ({{post.num_comments}})</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if post.num_comments > 0 %}
+                                    {% for comment in post.comment_set.all %}
+                                        <div class="card mb-3">
+                                            <div class="card-header">
+                                                <img src="{{comment.user.user.profile.avatar.url}}" class="rounded-circle" style="width:35px"alt="Avatar" />
+                                                <span  class='username-phr pl-1' style="font-size:18px">{{comment.user|title}}</span>
+                                                <span class="tect-muted" style='float:right; margin-top:10px'>
+                                                    {{comment.updated|timesince}} ago
+                                                </span>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">{{comment.body}}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-secondary text-center" role="alert">
+                                        No Comments Yet!
+                                    </div>  
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-secondary text-center" role="alert">
+                        No Post Yet!
+                    </div> 
+                {% endif %}
+        </div>
+        <div class="col-4 image-and-bio" style="border-radius:0px 5px 5px 0px">       
+            <h4 class="pt-2">Friends</h4>
+            <table class="table table-light" style="background:#f7d5a3">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>  
+        </div>
+
+    </div>
+</div>
 {% endblock %}
