@@ -54,9 +54,28 @@ post_save.connect(create_profile_signal, sender=User)
 ######################################################################################
 ######################################################################################
 
+# Relationship.objects.invation_received(myprofile)
+# Custom Query Set
+
+
+class RelationshipQuerySet(models.QuerySet):
+    def send_add(self, receiver):
+        qs = self.filter(receiver=receiver,
+                         status=Relationship.STATUS_CHOICES.SEND)
+        return qs
+
+
+class RelationshipManager(models.Manager):
+    def get_queryset(self):
+        return RelationshipQuerySet(self.model, using=self.db)
+
+    def adds_receiver(self, receiver):
+        return self.get_queryset().send_add(receiver)
+
 
 class Relationship(models.Model):
     class STATUS_CHOICES(models.TextChoices):
+        SEND = 'SEND', 'Send'
         ACCEPT = 'ACC', 'Accept'
         CANCEL = 'CAN', 'Cancel'
 
@@ -67,6 +86,7 @@ class Relationship(models.Model):
     status = models.CharField(max_length=6, choices=STATUS_CHOICES.choices)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    objects = RelationshipManager()
 
     def __str__(self):
         return f'{self.sender} to {self.receiver}'
