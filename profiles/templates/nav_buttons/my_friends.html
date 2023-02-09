@@ -1,0 +1,52 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}My Friends{% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href={% static 'style/nav-buttons/my_friends.css' %}>
+{% endblock %}
+{% block content %}
+
+
+    <div class=mt-5>
+        
+        <div id="alert-box" class="mb-2">
+
+        </div>
+
+        <h1>Friends(<span id="friends-count">{{friends_count}}</span>)</h1>
+
+        {% if friends_count == 0 %}
+        <br>
+        <div class="alert alert-secondary text-center" style="font-size:20px" role="alert">
+            You don't have friends yet!
+        </div>
+        {% endif %}
+        <br>
+        {% for f in my_friends %}
+        <div class="card mb-2" id="card--{{f.id}}">
+            <div class="card-body">
+                <div class="accept-button">
+                    <div>
+                        <a href={% url "profiles:profile" slug=f.username %}>
+                            <img class="profile-image" src="{{f.profile.avatar.url}}" />
+                        </a>
+                        <a href={% url "profiles:profile" slug=f.username %} class="ml-2 friend-username" >{{f.get_full_name}}</a>
+                    </div>
+                    <div>
+                        <form class="unfriend {{f.username}} {{f.id}}">
+                            {% csrf_token %}
+                            <button class="btn btn-danger ml-2" type="submit">
+                                <i class="fa-solid fa-circle-xmark mr-1"></i>
+                                Unfriend
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    <div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src={% static 'scripts/nav_buttons/my_friends.js' %}></script>
+{% endblock scripts %}

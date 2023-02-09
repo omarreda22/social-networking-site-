@@ -18,10 +18,23 @@
         
         
         <div class="row">
+
             <div class="col-md-12" id="alert-box">
                 
             </div>
+            <div class="col-12">
+                <div class="text-center nav-buttons">                  
+                    <a class="btn btn-light">People You May Know</a>
+                    <a href='{% url "profiles:my_friends" %}' class="btn btn-light">Friends({{friends_count}})</a>
+                    <a class="btn btn-light">Friend Requests</a>
+                    <a class="btn btn-light">Your Requests</a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
             <div class="col-md-4 border-right image-and-bio">
+                
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5 image-and-bio">
                     <img style="border:1px solid #000" class="rounded-circle mt-5" width="170px" id="new-avatar-url"
                         src="{{profile.avatar.url}}">
@@ -144,6 +157,7 @@
             </div>
             <div class="col-md-8 informa">
                 <br>
+                
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Public profile</h4>
@@ -233,6 +247,14 @@
                                 <td>{{profile.updated}}</td>
                             </tr>
                             <tr>
+                                <th>Friends</th>
+                                <td>{{friends_count}}</td>
+                            </tr>
+                            <tr>
+                                <th>Number of Posts</th>
+                                <td>{{profile.get_posts_count}}</td>
+                            </tr>
+                            <tr>
                                 <th>Is Active</th>
                                 <td>
                                     {% if profile.user.is_active %}
@@ -247,10 +269,6 @@
                                     {% endif %}
                                 </td>
                             </tr>
-                            <tr>
-                                <th>Posts Number</th>
-                                <td>{{profile.get_posts_count}}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -260,7 +278,7 @@
     </div>
     <div class="container mb-5 ">
         <div class="row">
-            <div class="col-8 informa" style="border-radius: 5px 0px 0px 5px;"> 
+            <div class="col-md-8 col-sm-12 informa" style="border-radius: 5px 0px 0px 5px;"> 
                 <div class="row">
                     <div class="col-6">
                         <h4 class="pt-2" >Posts (<span id='posts-count'>{{profile.get_posts_count}}</span>)</h4>
@@ -445,40 +463,47 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-4 image-and-bio" style="border-radius:0px 5px 5px 0px">       
-                <h4 class="pt-2">Friends</h4>
-                <table class="table table-light" style="background:#f7d5a3">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                    </tbody>
-                </table>  
+            <div class="col-md-4 col-sm-12 image-and-bio" style="border-radius:0px 5px 5px 0px">       
+                <div class="friends">
+                    <h4 class="pt-2">Friends({{friends_count}})</h4>
+                    <a href="{% url "profiles:my_friends" %}" class="btn btn-link">See All</a>
+                </div>
+                {% if friends_count == 0 %}
+                    <br>
+                    <div class="alert alert-secondary text-center" style="font-size:20px" role="alert">
+                        You don't have friends yet!
+                    </div>
+                {% else %}
+                    
+                    <table class="table table-light" style="background:#f7d5a3">
+                        <tbody>
+                        {% for f in friends %}
+                        <tr>
+                            <th>
+                                <div>
+                                    <a href={% url "profiles:profile" slug=f.username %}>
+                                        <img class="profile-image" src="{{f.profile.avatar.url}}" />
+                                    </a>
+                                    <a href={% url "profiles:profile" slug=f.username %} class="ml-2 friend-username" >{{f.get_full_name}}</a>
+                                </div>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <th class="text-center">
+                                <a 
+                                style="
+                                    font-size:18px;
+                                    text-decoration: underline;
+                                "
+                                href="{% url "profiles:my_friends" %}" class="btn btn-link">See All</a>
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>  
+                {% endif %}
             </div>
-
+            
         </div>
     </div>
 

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.http import JsonResponse
 
-from .models import Profile
+from .models import Profile, Relationship
 from .forms import UpdateProfileForm, UpdateBio, UpdateImage
 from posts.forms import CommentPostForm, PostForm
 from posts.models import Post
@@ -47,6 +47,11 @@ def user_profile(request, slug):
 
         post_form = PostForm()
 
+
+        friends = profile.friends.all().order_by("?")[:5]
+        friends_count = profile.friends.count()
+
+
         template_name = 'myprofile.html'
         context = {
             'profile': profile,
@@ -55,6 +60,8 @@ def user_profile(request, slug):
             'image_form': avatar,
             'comment_form': comment_form,
             'post_form': post_form,
+            'friends': friends,
+            'friends_count':friends_count,
         }
         return render(request, template_name, context)
 
@@ -65,22 +72,6 @@ def user_profile(request, slug):
     return render(request, template_name, context)
 
 
-# def update_bio(request, slug):
-#     profile = Profile.objects.get(slug=slug)
-#     bio_form = UpdateBio(request.POST, instance=profile)
-#     if bio_form.is_valid():
-#         bio_form = bio_form.save(commit=False)
-#         bio_form.save()
-#         return redirect(f'/myprofile/{profile.slug}')
-
-
-# def update_image(request, slug):
-#     profile = Profile.objects.get(slug=slug)
-#     image_form = UpdateImage(
-#         request.POST, request.FILES or None, instance=profile)
-#     if image_form.is_valid():
-#         image_form.save()
-#         return redirect(f'/myprofile/{profile.slug}')
 def update_bio(request, slug):
     profile = Profile.objects.get(slug=slug)
     BioForm = UpdateBio(request.POST or None, instance=profile)
@@ -128,3 +119,65 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.delete()
     return JsonResponse({'status': 'Ok'})
+
+
+def people_you_may_know(request, slug):
+    user = request.user
+    profiles = Profile.objects.all()
+
+
+
+    template_name = 'nav_buttons/people_you_may_know.html'
+    context = {
+        'profiles': profiles,
+    }
+    return render(request, template_name, context)
+
+
+def my_friends(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    my_friends = profile.friends.all()
+    friends_count = my_friends.count()
+
+    template_name = 'nav_buttons/my_friends.html'
+    context = {
+        'my_friends': my_friends,
+        'friends_count': friends_count,
+    }
+    return render(request, template_name, context)
+
+
+def requests_for_you(request, slug):
+    
+    template_name = 'nav_buttons/requests_for_you.html'
+    context = {
+
+    }
+    return render(request, template_name, context)
+
+
+def your_requests(request, slug):
+    
+    template_name = 'nav_buttons/your_requests.html'
+    context = {
+
+    }
+    return render(request, template_name, context)
+
+
+##### Some logic
+def unfriend(request, myfriend):
+    if is_ajax(request=request):
+        user = Profile.objects.get(slug=myfriend)
+        me = request.user.profile
+
+        remove_relationship = Relationship.objects.unfriend(me, user)
+        remove_relationship.status = Relationship.STATUS_CHOICES.REMOVE
+        remove_relationship.save()
+        data = {'ok': myfriend}
+        # friend = 
+        return JsonResponse(data)
+
+    data = {'ok': 'error'}
+    return JsonResponse(data)

@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import pre_save, post_save
-
+from django.db.models import Q
 
 User = settings.AUTH_USER_MODEL
 
@@ -59,25 +59,25 @@ post_save.connect(create_profile_signal, sender=User)
 
 
 class RelationshipQuerySet(models.QuerySet):
-    def send_add(self, receiver):
-        qs = self.filter(receiver=receiver,
-                         status=Relationship.STATUS_CHOICES.SEND)
+    def remove(self, me, user):
+        qs = self.get(
+            Q (sender=user, receiver=me, status=Relationship.STATUS_CHOICES.ACCEPT) |
+            Q (sender=me, receiver=user, status=Relationship.STATUS_CHOICES.ACCEPT)
+        )
         return qs
-
 
 class RelationshipManager(models.Manager):
     def get_queryset(self):
         return RelationshipQuerySet(self.model, using=self.db)
-
-    def adds_receiver(self, receiver):
-        return self.get_queryset().send_add(receiver)
-
-
+    
+    def unfriend(self, me, user):
+        return self.get_queryset().remove(me, user)
+    
 class Relationship(models.Model):
     class STATUS_CHOICES(models.TextChoices):
         SEND = 'SEND', 'Send'
         ACCEPT = 'ACC', 'Accept'
-        CANCEL = 'CAN', 'Cancel'
+        REMOVE = 'REMOVE', 'Remove'
 
     sender = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='sender')
@@ -95,13 +95,31 @@ class Relationship(models.Model):
     def is_accepted(self):
         return self.status == self.STATUS_CHOICES.ACCEPT
 
+    @property
+    def is_removed(self):
+        return self.status == self.STATUS_CHOICES.REMOVE
+
     def save(self, *args, **kwargs):
         """ 
         if receiver accept add, will be added in friends list
         """
         sender = self.sender
         rec = self.receiver
+        
         if self.is_accepted:
             sender.friends.add(rec.user)
             rec.friends.add(sender.user)
+
+        if self.is_removed:
+            sender.friends.remove(rec.user)
+            rec.friends.remove(sender.user)
+
         super().save(*args, **kwargs)
+
+
+# def send_add(self, receiver):
+#     qs = self.filter(receiver=receiver,
+#                      status=Relationship.STATUS_CHOICES.SEND)
+#     return qs
+# def adds_receiver(self, receiver):
+#     return self.get_queryset().send_add(receiver)

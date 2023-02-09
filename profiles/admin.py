@@ -4,4 +4,11 @@ from .models import Profile, Relationship
 
 
 admin.site.register(Profile)
-admin.site.register(Relationship)
+
+
+
+class RelationshipAdmin(admin.ModelAdmin):
+    list_display = ['sender', 'receiver', 'status']
+    list_editable = ['status']
+
+admin.site.register(Relationship, RelationshipAdmin)
