@@ -25,9 +25,8 @@
             <div class="col-12">
                 <div class="text-center nav-buttons">                  
                     <a class="btn btn-light">People You May Know</a>
-                    <a href='{% url "profiles:my_friends" %}' class="btn btn-light">Friends({{friends_count}})</a>
-                    <a class="btn btn-light">Friend Requests</a>
-                    <a class="btn btn-light">Your Requests</a>
+                    <a href='{% url "profiles:my_friends" %}' class="btn btn-light">Friends ({{friends_count}})</a>
+                    <a href='{% url "profiles:friend_requests" %}' class="btn btn-light">Friend Requests ({{friend_requests_count}})</a>
                 </div>
             </div>
             <br>

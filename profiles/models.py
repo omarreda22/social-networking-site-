@@ -6,6 +6,9 @@ from django.db.models import Q
 User = settings.AUTH_USER_MODEL
 
 
+
+    
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     slug = models.SlugField(null=True, blank=True)
@@ -66,6 +69,7 @@ class RelationshipQuerySet(models.QuerySet):
         )
         return qs
 
+
 class RelationshipManager(models.Manager):
     def get_queryset(self):
         return RelationshipQuerySet(self.model, using=self.db)
@@ -73,6 +77,11 @@ class RelationshipManager(models.Manager):
     def unfriend(self, me, user):
         return self.get_queryset().remove(me, user)
     
+    def friend_requests(self, me):
+        qs = self.get_queryset().filter(receiver=me, status=Relationship.STATUS_CHOICES.SEND)
+        return qs
+        
+
 class Relationship(models.Model):
     class STATUS_CHOICES(models.TextChoices):
         SEND = 'SEND', 'Send'

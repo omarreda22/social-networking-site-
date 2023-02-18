@@ -1,0 +1,56 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}Requests For You{% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href={% static 'style/nav-buttons/my_friends.css' %}>
+{% endblock %}
+{% block content %}
+
+    <div class=mt-5>
+            
+        <div id="alert-box" class="mb-2">
+
+        </div>
+
+        <h1>Requests(<span id="requests-count">{{count}}</span>)</h1>
+
+        {% if count == 0 %}
+        <br>
+        <div class="alert alert-secondary text-center" style="font-size:20px" role="alert">
+            You don't have friends yet!
+        </div>
+        {% endif %}
+        <br>
+        {% for request in requests %}
+        <div class="card mb-2" id="request-card-{{request.id}}">
+            <div class="card-body">
+                <div class="accept-button">
+                    <div>
+                        <a href={% url "profiles:profile" slug=request.sender.slug %}>
+                            <img class="profile-image" src="{{request.sender.avatar.url}}" />
+                        </a>
+                        <a href={% url "profiles:profile" slug=request.sender.slug %} class="ml-2 friend-username" >{{request.sender.user.get_full_name}}</a>
+                    </div>
+                    <div>
+                        <form class="friend_requests {{request.id}}">
+                            {% csrf_token %}
+                            <button class="btn btn-success" type="submit">
+                                <i class="fa-regular fa-circle-check mr-1"></i>
+                                Accept
+                            </button>
+                            <button class="btn btn-danger ml-2 remove_friend_request {{request.id}}">
+                                <i class="fa-solid fa-circle-xmark mr-1"></i>
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    <div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src={% static 'scripts/nav_buttons/friend_requests.js' %}></script>
+{% endblock scripts %}

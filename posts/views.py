@@ -13,7 +13,13 @@ def is_ajax(request):
 
 # must be authenticated ########################
 def posts_main(request):
-    posts = Post.objects.all()
+    user = request.user
+    profile  = Profile.objects.get(user=user)
+    friends = profile.friends.all()
+    profiles = []
+    for p in friends:
+        profiles.append(p.profile)
+    posts = Post.objects.filter(user__in=profiles)
     user = request.user
     form = PostForm()
     comment_form = CommentPostForm()

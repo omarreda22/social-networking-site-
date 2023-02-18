@@ -15,10 +15,11 @@ urlpatterns = [
 
     # Nav Buttons 
     path("<str:slug>/people_you_may_know/", views.people_you_may_know, name="people_you_may_know"),
-    path("myfriends/all", views.my_friends, name="my_friends"),
-    path("<str:slug>/requests_for_you/", views.requests_for_you, name="requests_for_you"),
-    path("<str:slug>/your_requests/", views.your_requests, name="your_requests"),
 
-    # logic
+    path("myfriends/all", views.my_friends, name="my_friends"),
     path("friend/delete/<str:myfriend>", views.unfriend, name="unfriend"),
+
+    path("friend_requests/all", views.friend_request, name="friend_requests"),
+    path("<int:rId>/friend_requests/new_status/", views.new_status, name='new_status'),
+    
 ]

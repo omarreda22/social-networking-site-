@@ -51,6 +51,8 @@ def user_profile(request, slug):
         friends = profile.friends.all().order_by("?")[:5]
         friends_count = profile.friends.count()
 
+        # me = request.user.profile
+        friend_requests_count = Relationship.objects.friend_requests(me=profile).count()
 
         template_name = 'myprofile.html'
         context = {
@@ -62,6 +64,7 @@ def user_profile(request, slug):
             'post_form': post_form,
             'friends': friends,
             'friends_count':friends_count,
+            'friend_requests_count': friend_requests_count,
         }
         return render(request, template_name, context)
 
@@ -148,24 +151,6 @@ def my_friends(request):
     return render(request, template_name, context)
 
 
-def requests_for_you(request, slug):
-    
-    template_name = 'nav_buttons/requests_for_you.html'
-    context = {
-
-    }
-    return render(request, template_name, context)
-
-
-def your_requests(request, slug):
-    
-    template_name = 'nav_buttons/your_requests.html'
-    context = {
-
-    }
-    return render(request, template_name, context)
-
-
 ##### Some logic
 def unfriend(request, myfriend):
     if is_ajax(request=request):
@@ -180,4 +165,36 @@ def unfriend(request, myfriend):
         return JsonResponse(data)
 
     data = {'ok': 'error'}
+    return JsonResponse(data)
+
+
+# Friend Requests
+def friend_request(request):
+    user = request.user
+    user_profile = user.profile
+    requests = Relationship.objects.friend_requests(me=user_profile).only('sender')
+    requests_count = requests.count()
+    
+    template_name = 'nav_buttons/friend_requests.html'
+    context = {
+        'requests': requests,
+        'count':requests_count,
+    }
+    return render(request, template_name, context)
+
+
+def new_status(request, rId):
+    status = request.POST['status']
+    user = request.user.profile
+    relationship = Relationship.objects.get(id=rId, receiver=user)
+
+    if status == "Accept":
+        relationship.status = Relationship.STATUS_CHOICES.ACCEPT
+    
+    if status == "Remove":
+        relationship.status = Relationship.STATUS_CHOICES.REMOVE
+    
+    relationship.save()
+    
+    data = {'new_relationship': relationship.status,}
     return JsonResponse(data)
