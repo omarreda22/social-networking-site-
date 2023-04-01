@@ -8,7 +8,7 @@ Social Networking System with Django in Backend and JavaScript in Frontend
 <br>
 
 ## Profile Page Demo
-- View All Friends and unfriend button
+- View All Friends with unfriend button
 - View All Friend Requests and accept/cancel
 - Edit all personal information(avatar/bio/public information)
 - View all posts
